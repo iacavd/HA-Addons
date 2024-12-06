@@ -1,0 +1,17 @@
+{
+    "name": "Abdul's Home Assistant Add-ons",
+    "url": "https://github.com/iacavd/HA-Addons",
+    "maintainer": "Abdul Jaleel",
+    "addons": [
+      {
+        "slug": "mariadb",
+        "name": "MariaDB",
+        "description": "MariaDB add-on using public repository",
+        "version": "1.0.0",
+        "url": "https://github.com/iacavd/HA-Addons/mariadb",
+        "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+        "startup": "services",
+        "boot": "auto"
+      }
+    ]
+  }

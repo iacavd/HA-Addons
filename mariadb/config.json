@@ -1,0 +1,26 @@
+{
+    "name": "MariaDB",
+    "version": "11.6.2",
+    "slug": "mariadb",
+    "description": "MariaDB latest version using public Docker repository",
+    "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+    "startup": "services",
+    "boot": "auto",
+    "ports": {
+      "3306/tcp": null
+    },
+    "options": {
+      "root_password": "example_password",
+      "database": "homeassistant",
+      "username": "hass_user",
+      "password": "securepassword"
+    },
+    "schema": {
+      "root_password": "str",
+      "database": "str",
+      "username": "str",
+      "password": "str"
+    },
+    "image": "docker.io/library/mariadb:latest",
+    "privileged": ["NET_ADMIN"]
+  }
