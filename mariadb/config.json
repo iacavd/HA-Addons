@@ -21,6 +21,5 @@
       "username": "str",
       "password": "str"
     },
-    "image": "docker.io/library/mariadb:latest",
-    "privileged": ["NET_ADMIN"]
+   "image": "jaleelajmal/mariadb:latest"
   }
