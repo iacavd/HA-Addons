@@ -1,0 +1,12 @@
+{
+    "name": "Test Add-on",
+    "version": "1.0.0",
+    "slug": "test_addon",
+    "description": "A test add-on to debug repository issues",
+    "arch": ["amd64"],
+    "startup": "services",
+    "boot": "manual",
+    "schema": {},
+    "image": "alpine:latest"
+  }
+  
