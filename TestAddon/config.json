@@ -7,6 +7,6 @@
     "startup": "services",
     "boot": "manual",
     "schema": {},
-    "image": "alpine:latest"
+    "image": "ghcr.io/library/alpine:latest"
   }
   
