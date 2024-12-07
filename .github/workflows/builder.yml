@@ -1,47 +1,28 @@
-name: Build and Publish Add-on
+name: Build and Publish Add-ons to GitHub Container Registry
 
 on:
   push:
     branches:
-      - main
+      - main  # Runs on pushes to the main branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build and Push Multi-Arch Docker Image
+      - name: Build and push Docker image to ghcr.io
         uses: docker/build-push-action@v4
         with:
           context: ./mariadb
           push: true
-          platforms: linux/arm64
-          tags: jaleelajmal/mariadb:latest
-
-      - name: Set Docker Hub Metadata
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          curl -X PATCH \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $(curl -s -X POST https://hub.docker.com/v2/users/login/ -H 'Content-Type: application/json' -d '{"username": "'"$DOCKER_USERNAME"'", "password": "'"$DOCKER_PASSWORD"'"}' | jq -r .token)" \
-            -d @mariadb/metadata.json \
-            https://hub.docker.com/v2/repositories/jaleelajmal/mariadb/
-
-      - name: Include Version Metadata
-        run: |
-          echo "MariaDB Current Version: $(jq -r .current_version mariadb/updater.json)"
-          echo "Release Date: $(jq -r .release_date mariadb/updater.json)"
+          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/i386
+          tags: ghcr.io/${{ github.repository_owner }}/mariadb:latest
