@@ -1,17 +1,18 @@
-name: Build and Test Add-ons
+name: Validate and Test Add-ons
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
+      - main  # Runs on pull requests targeting the main branch
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Validate Add-ons
+      - name: Validate Add-on Configuration
         run: |
-          docker build ./mariadb -t my-mariadb:latest
+          docker build ./mariadb -t mariadb:latest

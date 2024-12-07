@@ -22,12 +22,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and Push Multi-Arch Docker Image
         uses: docker/build-push-action@v4
         with:
           context: ./mariadb
           push: true
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/arm64
           tags: jaleelajmal/mariadb:latest
 
       - name: Set Docker Hub Metadata
