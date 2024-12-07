@@ -20,9 +20,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Debug workspace
-        run: ls -R
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -36,3 +33,12 @@ jobs:
           context: ./mariadb
           push: true
           tags: jaleelajmal/mariadb:latest
+
+      - name: Set Docker Hub Description
+        run: |
+          echo '{"description": "MariaDB add-on for Home Assistant with the latest updates.", "categories": ["Databases", "Home Assistant"]}' > metadata.json
+          curl -X PATCH \
+            -H "Content-Type: application/json" \
+            -u ${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }} \
+            -d @metadata.json \
+            https://hub.docker.com/v2/repositories/jaleelajmal/mariadb/
