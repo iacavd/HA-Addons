@@ -26,4 +26,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: your_dockerhub_username/mariadb:latest
+          tags: jaleelajmal/mariadb:latest
