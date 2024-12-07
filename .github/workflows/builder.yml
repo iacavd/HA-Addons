@@ -3,11 +3,7 @@ name: Build and Publish Add-on
 on:
   push:
     branches:
-      - main  # Run this workflow on pushes to the main branch
-
-  pull_request:
-    branches:
-      - main  # Run this workflow for pull requests targeting the main branch
+      - main
 
 jobs:
   build:
@@ -29,12 +25,11 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          # Specify the directory containing the Dockerfile
           context: ./mariadb
           push: true
           tags: jaleelajmal/mariadb:latest
 
-      - name: Set Docker Hub Description
+      - name: Set Docker Hub Metadata
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -42,6 +37,10 @@ jobs:
           curl -X PATCH \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $(curl -s -X POST https://hub.docker.com/v2/users/login/ -H 'Content-Type: application/json' -d '{"username": "'"$DOCKER_USERNAME"'", "password": "'"$DOCKER_PASSWORD"'"}' | jq -r .token)" \
-            -d '{"description": "MariaDB add-on for Home Assistant with the latest updates.", "full_description": "MariaDB add-on for Home Assistant built with the latest updates. Easily integrates with Home Assistant to manage your databases effectively.", "categories": ["Databases", "Home Assistant"]}' \
+            -d @mariadb/metadata.json \
             https://hub.docker.com/v2/repositories/jaleelajmal/mariadb/
-  
+
+      - name: Include Version Metadata
+        run: |
+          echo "MariaDB Current Version: $(jq -r .current_version mariadb/updater.json)"
+          echo "Release Date: $(jq -r .release_date mariadb/updater.json)"
