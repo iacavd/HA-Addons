@@ -21,5 +21,5 @@
       "username": "str",
       "password": "str"
     },
-   "image": "jaleelajmal/mariadb:latest"
+      "image": "docker.io/jaleelajmal/mariadb:latest"
   }
