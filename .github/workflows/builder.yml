@@ -35,10 +35,13 @@ jobs:
           tags: jaleelajmal/mariadb:latest
 
       - name: Set Docker Hub Description
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo '{"description": "MariaDB add-on for Home Assistant with the latest updates.", "categories": ["Databases", "Home Assistant"]}' > metadata.json
           curl -X PATCH \
             -H "Content-Type: application/json" \
-            -u ${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }} \
-            -d @metadata.json \
+            -H "Authorization: Bearer $(curl -s -X POST https://hub.docker.com/v2/users/login/ -H 'Content-Type: application/json' -d '{"username": "'"$DOCKER_USERNAME"'", "password": "'"$DOCKER_PASSWORD"'"}' | jq -r .token)" \
+            -d '{"description": "MariaDB add-on for Home Assistant with the latest updates.", "full_description": "MariaDB add-on for Home Assistant built with the latest updates. Easily integrates with Home Assistant to manage your databases effectively.", "categories": ["Databases", "Home Assistant"]}' \
             https://hub.docker.com/v2/repositories/jaleelajmal/mariadb/
+  
